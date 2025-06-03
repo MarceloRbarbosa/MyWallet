@@ -8,7 +8,8 @@ export async function createTransactions(req, res) {
     try {
        await db.collection("transactions").insertOne({ 
             ...transaction,
-            userId: new ObjectId(user._id)
+            userId: new ObjectId(user._id),
+            date: new Date()
         })
         res.status(201).send("Transação concluida com sucesso!")
     } catch (err) {
@@ -23,7 +24,7 @@ export async function getTransactions(req, res){
         const skip = (page-1) * limit;
 
 
-        const transactions = await db.collection("transactions").find().skip(skip).limit(limit).toArray();
+        const transactions = await db.collection("transactions").find().sort({ date: -1 }).skip(skip).limit(limit).toArray();
 
         res.send(transactions);
     } catch (err) {
