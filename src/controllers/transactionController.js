@@ -2,14 +2,12 @@ import { db } from "../config/database.js"
 
 export async function createTransactions(req, res) {
     const transaction = req.body;
-    const user = res.locals.user; 
+    
 
     try {
-        await db.collection("transactions").insertOne({
-            userId: user._id,
-            value: transaction.value,
-            description: transaction.description,
-            type: transaction.type,
+       await db.collection("transactions").insertOne({ 
+            ...transaction,
+            // user: res.locals.user._id (retirar caso queira guardar usuario da requisição);
         })
         res.status(201).send("Transação concluida com sucesso!")
     } catch (err) {
