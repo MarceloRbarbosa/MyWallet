@@ -16,9 +16,13 @@ export async function createTransactions(req, res) {
 };
 
 export async function getTransactions(req, res){
-
     try {
-        const transactions = await db.collection("transactions").find().toArray();
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page-1) * limit;
+
+
+        const transactions = await db.collection("transactions").find().skip(skip).limit(limit).toArray();
 
         res.send(transactions);
     } catch (err) {
