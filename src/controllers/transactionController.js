@@ -18,13 +18,15 @@ export async function createTransactions(req, res) {
 };
 
 export async function getTransactions(req, res){
+    const user = res.locals.user
+    
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = 10;
         const skip = (page-1) * limit;
 
 
-        const transactions = await db.collection("transactions").find().sort({ date: -1 }).skip(skip).limit(limit).toArray();
+        const transactions = await db.collection("transactions").find({userId: new ObjectId(user._id)}).sort({ date: -1 }).skip(skip).limit(limit).toArray();
 
         res.send(transactions);
     } catch (err) {
