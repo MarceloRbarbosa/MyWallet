@@ -12,7 +12,9 @@ export async function signUp(req, res) {
         if(existingUser) return res.status(409).send("Este email já está em uso!") 
 
         await db.collection("users").insertOne({
-            ...user, password: bcrypt.hashSync(user.password, 10)
+            name: user.name,
+            email: user.email, 
+            password: bcrypt.hashSync(user.password, 10),
         })
         res.status(201).send("Usuário cadastrado com sucesso!")
     } catch (err) {
